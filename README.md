@@ -2,6 +2,8 @@
 
 An AI-agent skill for Counter-Strike 2 Major Pick'Em / Viewer Pass predictions.
 
+[中文 README](README.zh-CN.md)
+
 The goal is not to promise a Diamond coin every Major. CS2 has too much BO1 variance, roster volatility, map-veto variance, and playoff upset risk for that. The practical goal is a disciplined **Gold floor with Diamond upside** by optimizing each stage for the mission threshold:
 
 - Swiss stages: `5 correct = pass`, `4 or fewer = fail`, `6+ = good`
