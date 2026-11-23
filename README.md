@@ -54,6 +54,8 @@ The [prediction archive](predictions/README.md) keeps exact cards next to their 
 
 Found a scoring bug or have an idea for a better forecast? [Open an issue](https://github.com/jamesKhor/cs2-major-pickem/issues/new) or send a pull request. See the [contribution guide](CONTRIBUTING.md) for what evidence and tests to include.
 
+Browse [all pull requests](https://github.com/jamesKhor/cs2-major-pickem/pulls?q=is%3Apr) for the change history. The [Diamond-first scoring update](https://github.com/jamesKhor/cs2-major-pickem/commit/9a4a8baa704e472d55fd0ef8839ec67e2a5e2010) went directly to `main` before we started using PRs for every change.
+
 ## What This Skill Does
 
 This skill teaches an AI agent to:
