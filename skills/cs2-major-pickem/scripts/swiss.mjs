@@ -74,9 +74,12 @@ export function playStage(win, allBo3 = false) {
 }
 
 export function toCard(teams, buckets) {
-  if (buckets.length !== 3 || buckets.some((b, i) => b.length !== sizes[i])) throw Error('Expected 2/6/2 picks');
+  if (!Array.isArray(buckets) || buckets.length !== sizes.length ||
+      !sizes.every((size, i) => Array.isArray(buckets[i]) && buckets[i].length === size)) {
+    throw Error('Expected 2/6/2 picks');
+  }
   const seen = new Set();
-  return buckets.map(bucket => bucket.reduce((mask, name) => {
+  return buckets.map(bucket => Array.from(bucket).reduce((mask, name) => {
     const t = teams.indexOf(name);
     if (t < 0 || seen.has(t)) throw Error(`Unknown or duplicate pick: ${name}`);
     seen.add(t);
@@ -86,6 +89,11 @@ export function toCard(teams, buckets) {
 
 export function score([a, b, c], [x, y, z]) {
   return pop[a & x] + pop[b & y] + pop[c & z];
+}
+
+export function openingScoreUpperBound([sweep, , winless]) {
+  const openerCollisions = mask => pop[(mask & 255) & (mask >>> 8)];
+  return 10 - openerCollisions(sweep) - openerCollisions(winless);
 }
 
 const sigmoid = x => 1 / (1 + Math.exp(-x));
@@ -113,6 +121,7 @@ function simulate(input, scenario, count, seed) {
     power[t] += change;
     power[t + 8] -= change;
   }
+  if (!power.every(Number.isFinite)) throw Error('Scenario produced non-finite team strengths');
   const output = new Uint16Array(3 * count);
   for (let i = 0; i < count; i++) {
     const drift = indices.map(() => teamNoise * (random() + random() + random() + random() - 2) * Math.sqrt(3));
@@ -122,7 +131,9 @@ function simulate(input, scenario, count, seed) {
       const base = round === 0
         ? raw * (1 - marketWeight) + opener[a] * marketWeight + (input.vetoLogit?.[a] ?? 0) * formWeight
         : raw;
-      return random() < sigmoid(base + scale * (drift[a] - drift[b]));
+      const logOdds = base + scale * (drift[a] - drift[b]);
+      if (!Number.isFinite(logOdds)) throw Error('Scenario produced non-finite match log odds');
+      return random() < sigmoid(logOdds);
     }, input.allBo3);
     output.set(buckets, 3 * i);
   }
@@ -222,14 +233,39 @@ function join(trials) {
   return union;
 }
 
-export function forecast(input, nTrain = 4500, nTest = 25000) {
-  const names = input.teams.map(t => t.name);
+function validateInput(input, nTrain, nTest) {
+  const positiveInteger = x => Number.isSafeInteger(x) && x > 0;
+  const positive = x => Number.isFinite(x) && x > 0;
+  const nonnegative = x => Number.isFinite(x) && x >= 0;
+  const named = name => typeof name === 'string' && name.trim().length > 0;
   const validDecimal = x => Number.isFinite(x) && x > 1;
-  if (names.length !== 16 || new Set(names).size !== 16 || input.openers.length !== 8 ||
-      !input.openers.every(o => o.length === 2 && o.every(validDecimal)) ||
-      !input.teams.every(t => t.hltv > 0 && t.vrs > 0) || !input.scenarios.length) {
-    throw Error('Need 16 distinct seeded teams with rankings, eight two-sided prices, and scenarios');
+  if (![nTrain, nTest].every(positiveInteger)) throw Error('Training and evaluation draws must be positive integers');
+  if (typeof input?.allBo3 !== 'boolean') throw Error('allBo3 must be true or false');
+  if (!Array.isArray(input.teams) || input.teams.length !== 16 ||
+      !Array.from(input.teams).every(t => t && named(t.name) && positiveInteger(t.hltv) && positiveInteger(t.vrs) &&
+        (t.form === undefined || Number.isFinite(t.form))) || new Set(input.teams.map(t => t.name)).size !== 16) {
+    throw Error('Need 16 distinct teams with positive integer rankings and finite form adjustments');
   }
+  if (!Array.isArray(input.openers) || input.openers.length !== 8 || !Array.from(input.openers).every(o =>
+    Array.isArray(o) && o.length === 2 && validDecimal(o[0]) && validDecimal(o[1]) && Number.isFinite(logit(o[1] / (o[0] + o[1]))))) {
+    throw Error('Need eight opener pairs with valid two-sided decimal prices');
+  }
+  if (input.vetoLogit !== undefined && (!Array.isArray(input.vetoLogit) || input.vetoLogit.length !== 8 ||
+      !Array.from(input.vetoLogit).every(Number.isFinite))) throw Error('vetoLogit must have eight finite adjustments');
+  if (input.cards !== undefined && (!input.cards || typeof input.cards !== 'object' || Array.isArray(input.cards))) {
+    throw Error('Expected cards to be an object keyed by card name');
+  }
+  if (!Array.isArray(input.scenarios) || !input.scenarios.length || !Array.from(input.scenarios).every(s =>
+    s && named(s.name) && nonnegative(s.marketWeight) && s.marketWeight <= 1 && nonnegative(s.formWeight) &&
+    positive(s.bo3Scale) && nonnegative(s.teamNoise) && positive(s.strengthScale)) ||
+    new Set(input.scenarios.map(s => s.name)).size !== input.scenarios.length) {
+    throw Error('Need uniquely named scenarios with valid marketWeight, formWeight, bo3Scale, teamNoise, and strengthScale');
+  }
+}
+
+export function forecast(input, nTrain = 4500, nTest = 25000) {
+  validateInput(input, nTrain, nTest);
+  const names = input.teams.map(t => t.name);
   const named = Object.entries(input.cards ?? {}).map(([label, card]) => [label, toCard(names, card)]);
   const training = input.scenarios.map((s, i) => simulate(input, s, nTrain, 45147 + i * 371));
   const pooled = join(training);
@@ -239,6 +275,7 @@ export function forecast(input, nTrain = 4500, nTest = 25000) {
   const testing = input.scenarios.map((s, i) => simulate(input, s, nTest, 902681 + i * 971));
   const heldOut = join(testing);
   const render = (label, card) => ({ label, card: card.map(m => names.filter((_, i) => m & (1 << i))),
+    openingScoreUpperBound: openingScoreUpperBound(card),
     ...evaluate(card, heldOut, true), byScenario: Object.fromEntries(testing.map((t, i) =>
       [input.scenarios[i].name, evaluate(card, t).pass])) });
   const testRates = rates(heldOut);
@@ -250,6 +287,8 @@ export function forecast(input, nTrain = 4500, nTest = 25000) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const input = JSON.parse(readFileSync(process.argv[2], 'utf8'));
-  console.log(JSON.stringify(forecast(input, Number(process.argv[3]) || undefined, Number(process.argv[4]) || undefined), null, 2));
+  const [, , file, training, evaluation] = process.argv;
+  const input = JSON.parse(readFileSync(file, 'utf8'));
+  console.log(JSON.stringify(forecast(input, training === undefined ? undefined : Number(training),
+    evaluation === undefined ? undefined : Number(evaluation)), null, 2));
 }

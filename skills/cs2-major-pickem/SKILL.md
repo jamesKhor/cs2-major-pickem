@@ -13,7 +13,7 @@ Produce stage-by-stage CS2 Major Pick'Em cards and audits that optimize for coin
 - `4 or fewer = fail`
 - `6+ = good`
 
-Target Gold while keeping Diamond possible. Neither coin tier nor any stage pass is guaranteed.
+Target Diamond first and fall back to Gold if any challenge is missed. Neither coin tier nor any stage pass is guaranteed. Diamond needs every mission, not 10/10 correct on each Swiss card.
 
 The goal is to pass each stage first, then chase 6+ when it does not materially reduce the 5-correct floor.
 
@@ -65,6 +65,8 @@ Typical CS2 Major playoff coin checks:
 - Correctly predict the grand-final winner.
 
 If a specific Major's in-game challenge text differs, follow the in-game text.
+
+For Singapore 2026, activation and four on-time submissions give five participation ticks. There are six separate accuracy ticks: three Swiss stages, quarterfinals, semifinals, and champion. Gold starts at eight total ticks; Diamond requires all eleven. Track real ticks separately from planned submissions. Missing one challenge ends the Diamond path, not the ability to pick the next stage. See [coin and playoff math](references/coin-math.md).
 
 Playoff rules:
 
@@ -126,7 +128,7 @@ Do not pick `0-3` from a hard opener alone. Do not put a top team in `3-1/3-2` i
 
 ## Playoff Prediction Method
 
-Optimize for the coin mission first: 2 quarterfinal winners, 1 semifinal winner, and the champion. Then optimize for bracket accuracy.
+Use [the joint playoff calculator](references/coin-math.md) after the eight teams, seed order, and matchup probabilities are verified. While Diamond is possible, maximize the probability of all three missions together. If not, maximize the chance of the remaining ticks required for Gold. A correct champion already implies a correct semifinal, but not a second correct quarterfinal. Do not multiply the three playoff mission probabilities as if they were independent.
 
 Evaluate each playoff team on:
 
@@ -160,6 +162,7 @@ Calculation:
 
 - `minimum_needed_to_pass = max(0, 5 - locked_correct)`
 - `locked_correct + pending_live` is an upper bound. Reduce it when picks cannot coexist due to a shared match or a full exact bucket.
+- Before a stage, use the simulator's `openingScoreUpperBound` where supported. It removes impossible same-bucket opener pairs, but it is not a proven attainable score.
 - `pass` if `locked_correct >= 5`
 - `fail` if `max_possible_correct < 5`, or the stage is complete and `locked_correct < 5`
 - `still alive` otherwise
@@ -197,7 +200,7 @@ locked_correct: 0
 locked_wrong: 0
 pending_live: 10
 minimum_needed_to_pass: 5
-max_possible_correct: 10
+max_possible_correct: <openingScoreUpperBound, or tighter confirmed upper bound>
 status: still alive
 
 Why these buckets

@@ -2,9 +2,9 @@
 
 An AI-agent skill for Counter-Strike 2 Major Pick'Em / Viewer Pass predictions.
 
-[中文 README](README.zh-CN.md) | [How we build and test the model](#methodology)
+[中文 README](README.zh-CN.md) | [Coin math](#coin-math) | [How we build and test the model](#methodology)
 
-The goal is to **target Gold and keep Diamond possible**, not to guarantee either. CS2 has too much BO1 variance, roster volatility, and playoff upset risk for that. We optimize each card for the mission threshold:
+We **aim for Diamond first, with Gold as the fallback**. Neither is guaranteed. We optimize each card for the missions that count, not for a perfect score on every card:
 
 - Swiss stages: `5 correct = pass`, `4 or fewer = fail`, `6+ = good`
 - Playoffs: satisfy the in-game bracket missions, usually 2 quarterfinal winners, 1 semifinal winner, and the champion
@@ -79,6 +79,63 @@ In CS2 Pick'Em, a great team can be a bad pick if it is placed in the wrong buck
 
 This skill forces the agent to score the card exactly like the in-game Viewer Pass.
 
+## Coin Math
+
+[Singapore 2026 Pick'Em](https://blast.tv/major/pickems/) has **11 challenges**. Each completed challenge gives one tick:
+
+| Challenge type | Ticks | What counts |
+| --- | ---: | --- |
+| Activate the Viewer Pass | 1 | Activate the coin before the tournament ends. Activate before the first lock to protect stage credit. |
+| Submit complete cards on time | 4 | Save all 10 picks for each Swiss stage and all 7 playoff picks before their respective locks. A submission tick does not depend on accuracy. |
+| Swiss accuracy | 3 | One tick per stage for at least 5 exact-bucket hits out of 10. Diamond does **not** require 10/10 in any Swiss stage. |
+| Playoff accuracy | 3 | Separate ticks for at least 2 of 4 quarterfinal winners, at least 1 of 2 semifinal winners, and the correct Grand Final winner. The third-place match is not a Pick'Em challenge. |
+
+Silver starts at **4 ticks**, Gold at **8**, and Diamond needs **all 11**. The general accounting is:
+
+```text
+total ticks = activation + on-time submissions + Swiss stages passed + playoff missions passed
+Gold or better: total ticks >= 8
+Diamond:        total ticks = 11
+```
+
+With all **5 participation ticks** earned, Gold or better takes **3 of 6 accuracy missions**. Diamond takes **all 6**. One missed challenge ends the Diamond path, but even three Swiss misses leave a Gold route:
+
+| Swiss stages passed | Playoff missions needed for Gold or better | Diamond still possible? |
+| ---: | ---: | --- |
+| 3 | 0 | Yes, with all 3 playoff missions |
+| 2 | 1 | No |
+| 1 | 2 | No |
+| 0 | 3 | No |
+
+At the start of playoffs, use `max(0, 8 - participation ticks - Swiss stages passed)` to find how many playoff accuracy ticks Gold needs, including when a submission tick was missed. If that exceeds the playoff ticks available, Gold is out of reach. This is tick accounting, not a guarantee that an unsaved card can earn accuracy credit.
+
+Cologne shows the fallback: **Stage 2 + quarterfinals + semifinals** supplied the three accuracy ticks, and we earned [Gold](predictions/2026-iem-cologne/README.md).
+
+### Calculating the Odds
+
+Assume all five participation ticks. Let `S1`, `S2`, and `S3` mean passing the respective Swiss accuracy missions, `K` be the number of Swiss passes, and `R` be the number of playoff missions hit:
+
+```text
+P(Diamond) = P(S1) x P(S2 | S1) x P(S3 | S1 and S2) x P(R = 3 | all three Swiss passed)
+P(Gold or better) = P(K + R >= 3)
+P(Gold only) = P(Gold or better) - P(Diamond)
+```
+
+The conditions matter: earlier rounds determine the next field, and playoff picks are linked. In a consistent bracket a correct champion also means a correct semifinal pick, but it does not give you the second correct quarterfinal automatically. Don't multiply the three playoff mission rates as though they were independent.
+
+**Worked example, not a Singapore forecast.** Use our Stage 1 estimate of **33.53%**. For illustration only, assume Stage 2 and Stage 3 pass rates of **45%** and **50%**, and playoff probabilities of **5.8492%, 24.1510%, 42.6657%, and 27.3341%** for `R = 0, 1, 2, 3`, respectively. This example treats the Swiss passes and the overall playoff count as independent; it does **not** treat the three playoff missions themselves as independent.
+
+| Situation | Gold or better | Diamond |
+| --- | ---: | ---: |
+| Before Stage 1 | 72.1% | 2.1% |
+| Stage 1 passes | 88.8% | 6.2% |
+| Stage 1 misses | 63.7% | 0% |
+| Stages 1 and 2 both miss | 48.7% | 0% |
+| All three Swiss stages pass | 100% | 27.3% |
+| All three Swiss stages miss | 27.3% | 0% |
+
+**Decision rule:** While Diamond is live, prioritize the probability of completing every remaining accuracy mission. Once the playoff field is set, the [coin calculator](skills/cs2-major-pickem/references/coin-math.md) can compare all **128 consistent brackets** against weighted outcomes to find the best chance of hitting all three playoff missions together. If Diamond is no longer possible, choose the card most likely to get the remaining ticks needed for Gold. Refresh estimates after each actual stage rather than reusing the example probabilities above.
+
 ## Methodology
 
 The **skill** tells the agent what to verify, how to read Pick'Em rules, and how to record a recommendation. The **simulator** estimates how often each whole card passes. The target is **at least 5 exact hits out of 10**, not the highest average score or the most teams correctly picked to advance.
@@ -87,7 +144,7 @@ The **skill** tells the agent what to verify, how to read Pick'Em rules, and how
 
 1. **Freeze the inputs before lock.** Record the stage format, 16 seeded teams, eight confirmed openers, HLTV/VRS ranks, current rosters, and two-sided opener odds. Use recent results and likely map vetoes where supported. In Stage 1 there is no same-event form; in Stages 2 and 3, include the previous stage's results for teams that qualified.
 2. **Simulate complete Swiss stages.** Use the event's BO1/BO3 rules, reseeding, Buchholz tiebreaks, and rematch avoidance. Compare a balanced model with form-heavy and rank/odds-heavy versions. The model uses the posted odds as opener evidence; later matchups are simulated, not known in advance. [Valve's Major rulebook](https://github.com/ValveSoftware/counter-strike_rules_and_regs/blob/main/major-supplemental-rulebook.md)
-3. **Score whole cards on the same outcomes.** A simulated run counts as a pass only if five or more slots match their exact buckets. Searching full cards captures tradeoffs between slots. For instance, if both teams picked at `3-0` instead qualify at `3-1/3-2`, the card can hit at most four middle slots.
+3. **Score whole cards on the same outcomes.** A simulated run counts as a pass only if five or more slots match their exact buckets. Searching full cards captures tradeoffs between slots. If both `3-0` picks instead land in the middle, the card can hit at most four middle slots. With no correct `0-3` pick it cannot pass; with one, it needs all four available middle hits.
 4. **Test finalists on fresh simulated draws.** Compare the finalists and a rank-first baseline on outcomes that were not used to search for the card. Publish the recommendation before lock and append the real score afterward. Held-out simulated draws check sampling noise; they do not validate the model against real matches.
 
 ### How Many Cards Are Possible?
@@ -120,7 +177,7 @@ An exploratory wider search considered **20,434 cards** and did not find a bette
 
 ### Two Separate Reviews
 
-- **Test review:** Checks whether the program follows the rules. All six existing tests passed, including Swiss pairing, BO1/BO3 formats, and exact-bucket scoring. The review also found two gaps: malformed scenario settings can produce a bogus forecast instead of an error, and a fixed pre-stage maximum of 10 can overstate what's attainable when picks collide. The published Singapore inputs were valid; these gaps remain on the improvement list.
+- **Test review:** Checks whether the program follows the rules. The initial six tests passed, but the review found two gaps. Malformed scenario settings now stop the forecast instead of returning a bogus number. The pre-stage ceiling now accounts for direct opener collisions in the exact `3-0` and `0-3` buckets and is labeled as an upper bound, not necessarily an attainable score. The published Singapore inputs were valid and its forecast did not change.
 - **Model review:** Checks whether the inputs and assumptions produce stable, interpretable outputs. The reviewer verified the frozen inputs and score totals, and reproduced **33.53%**. Halving opener-odds weight lowered the published card to **32.88%**; removing the model's extra BO3 edge for stronger teams lowered it to **30.41%**. The published card still led the cards compared in both checks. Changing assumptions moved the estimate far more than rerunning random seeds did.
 
 ### Historical Validation
@@ -130,7 +187,7 @@ Replay real brackets to test rules, then compare forecast versions using only da
 Reproduce the main Singapore comparison from the repository root:
 
 ```sh
-node --test skills/cs2-major-pickem/scripts/swiss.test.mjs
+node --test skills/cs2-major-pickem/scripts/swiss.test.mjs skills/cs2-major-pickem/scripts/coin.test.mjs
 node skills/cs2-major-pickem/scripts/swiss.mjs predictions/2026-pgl-singapore/stage-1-input.json 12000 60000
 ```
 

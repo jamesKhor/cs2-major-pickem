@@ -10,7 +10,7 @@ Use [GitHub Issues](https://github.com/jamesKhor/cs2-major-pickem/issues/new) fo
 4. Open a pull request explaining what changed, why, and what you verified.
 
 ```sh
-node --test skills/cs2-major-pickem/scripts/swiss.test.mjs
+node --test skills/cs2-major-pickem/scripts/swiss.test.mjs skills/cs2-major-pickem/scripts/coin.test.mjs
 node skills/cs2-major-pickem/scripts/swiss.mjs predictions/2026-pgl-singapore/stage-1-input.json 12000 60000
 ```
 
