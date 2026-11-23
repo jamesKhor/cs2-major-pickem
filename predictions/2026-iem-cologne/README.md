@@ -1,5 +1,7 @@
 # IEM Cologne Major 2026
 
+[中文完整版](README.zh-CN.md)
+
 **Record:** recovered cards, published after the event. The reported submitted cards are distinguished from the Stage 3 recommendation, for which there is no independently verified lock receipt. The scores below are checked against the final results.
 
 | Stage | Score | Mission |

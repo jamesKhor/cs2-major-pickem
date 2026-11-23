@@ -30,6 +30,26 @@ Final pre-lock card, November 23, 2026. The first match is at 12:00 noon SGT (UT
 
 The [prediction archive](predictions/README.md) keeps exact cards next to their outcomes, including misses. The [2024-2025 historical backtests](docs/BACKTEST_REPORT.md) are retrospective and do not count as live predictions.
 
+### IEM Cologne 2026 Picks and Results
+
+**Bold teams were correct in their exact bucket.** Stage 3 is the recorded recommendation; its in-game submission was not independently verified.
+
+| Stage | 3-0 picks | 3-1 / 3-2 picks | 0-3 picks | Score |
+| --- | --- | --- | --- | --- |
+| Stage 1 | GamerLegion, **BetBoom** | **BIG**, HEROIC, Liquid, **MIBR**, B8, Lynn Vision | NRG, THUNDER dOWNUNDER | **3/10**, missed |
+| Stage 2 | **Spirit**, Legacy | **G2**, GamerLegion, Astralis, FUT, **BetBoom**, **9z** | **FlyQuest**, M80 | **5/10**, passed |
+| Stage 3 | Vitality, Natus Vincere | Spirit, **Falcons**, FURIA, **Aurora**, MOUZ, The MongolZ | Monte, **B8** | **3/10**, missed |
+
+| Playoffs | Picks | Result |
+| --- | --- | --- |
+| Quarterfinals | **FURIA**, **Aurora**, **Spirit**, Vitality | **3/4**, passed |
+| Semifinals | **FURIA**, Spirit | **1/2**, passed |
+| Champion | Spirit | **0/1**, missed; Falcons won |
+
+**Outcome:** We met the Stage 2, quarterfinal and semifinal accuracy challenges. That would put us at **8/11 (Gold)** if the coin was activated and all four cards were submitted on time. The in-game coin award was not verified.
+
+[Full Cologne results and sources](predictions/2026-iem-cologne/README.md) · [科隆完整预测与赛果](predictions/2026-iem-cologne/README.zh-CN.md)
+
 ## Contribute
 
 Found a scoring bug or have an idea for a better forecast? [Open an issue](https://github.com/jamesKhor/cs2-major-pickem/issues/new) or send a pull request. See the [contribution guide](CONTRIBUTING.md) for what evidence and tests to include.

@@ -21,7 +21,27 @@
 
 首场比赛于 11 月 24 日中午 12:00（中国 / 新加坡时间）开始。请以游戏内倒计时为准，提前激活观赛通行证并保存全部 10 项预测。
 
-[新加坡完整预测与结果](predictions/2026-pgl-singapore/README.md) · [科隆完整预测与结果](predictions/2026-iem-cologne/README.md) · [预测档案](predictions/README.md)
+[新加坡完整预测与结果](predictions/2026-pgl-singapore/README.md) · [预测档案](predictions/README.md)
+
+## IEM 科隆 Major 2026：我们的预测与赛果
+
+**加粗的队伍表示猜中了对应分组。** 第三阶段展示的是当时记录的推荐卡，未独立验证游戏内是否按这张卡提交。
+
+| 阶段 | 3-0 预测 | 3-1 / 3-2 预测 | 0-3 预测 | 成绩 |
+| --- | --- | --- | --- | --- |
+| 第一阶段 | GamerLegion、**BetBoom** | **BIG**、HEROIC、Liquid、**MIBR**、B8、Lynn Vision | NRG、THUNDER dOWNUNDER | **3/10**，未通过 |
+| 第二阶段 | **Spirit**、Legacy | **G2**、GamerLegion、Astralis、FUT、**BetBoom**、**9z** | **FlyQuest**、M80 | **5/10**，通过 |
+| 第三阶段 | Vitality、Natus Vincere | Spirit、**Falcons**、FURIA、**Aurora**、MOUZ、The MongolZ | Monte、**B8** | **3/10**，未通过 |
+
+| 淘汰赛 | 预测 | 成绩 |
+| --- | --- | --- |
+| 四分之一决赛 | **FURIA**、**Aurora**、**Spirit**、Vitality | **3/4**，通过 |
+| 半决赛 | **FURIA**、Spirit | **1/2**，通过 |
+| 冠军 | Spirit | **0/1**，未猜中；Falcons 夺冠 |
+
+**最终成绩：** 第二阶段、四分之一决赛和半决赛的准确度任务达标。如果已激活挑战币，并按时提交全部四张预测卡，合计就是 **8/11，达到金牌挑战币门槛**。实际获得的挑战币等级未核实。
+
+[科隆完整预测、赛果与来源（中文）](predictions/2026-iem-cologne/README.zh-CN.md)
 
 欢迎[提交问题或功能建议](https://github.com/jamesKhor/cs2-major-pickem/issues/new)，也欢迎通过 Pull Request 贡献。请先阅读[贡献指南](CONTRIBUTING.md)。
 
