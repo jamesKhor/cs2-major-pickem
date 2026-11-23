@@ -23,10 +23,10 @@ Final pre-lock card, November 23, 2026. The first match is at 12:00 noon SGT (UT
 
 ## Prediction Results
 
-| Major | Stage 1 | Stage 2 | Stage 3 | Playoffs |
-| --- | --- | --- | --- | --- |
-| [IEM Cologne 2026](predictions/2026-iem-cologne/README.md) | 3/10, fail | 5/10, pass | 3/10, fail | 3/4 QF, 1/2 SF, champion missed |
-| [PGL Singapore 2026](predictions/2026-pgl-singapore/README.md) | Card published, result pending | Awaiting field | Awaiting field | Awaiting bracket |
+| Major | Stage 1 | Stage 2 | Stage 3 | Playoffs | Coin |
+| --- | --- | --- | --- | --- | --- |
+| [IEM Cologne 2026](predictions/2026-iem-cologne/README.md) | 3/10, fail | 5/10, pass | 3/10, fail | 3/4 QF, 1/2 SF, champion missed | **Gold** |
+| [PGL Singapore 2026](predictions/2026-pgl-singapore/README.md) | Card published, result pending | Awaiting field | Awaiting field | Awaiting bracket | Pending |
 
 The [prediction archive](predictions/README.md) keeps exact cards next to their outcomes, including misses. The [2024-2025 historical backtests](docs/BACKTEST_REPORT.md) are retrospective and do not count as live predictions.
 
@@ -46,7 +46,7 @@ The [prediction archive](predictions/README.md) keeps exact cards next to their 
 | Semifinals | **FURIA**, Spirit | **1/2**, passed |
 | Champion | Spirit | **0/1**, missed; Falcons won |
 
-**Outcome:** We met the Stage 2, quarterfinal and semifinal accuracy challenges. That would put us at **8/11 (Gold)** if the coin was activated and all four cards were submitted on time. The in-game coin award was not verified.
+**Outcome: Gold Coin earned.** We passed the Stage 2, quarterfinal and semifinal accuracy challenges.
 
 [Full Cologne results and sources](predictions/2026-iem-cologne/README.md) · [科隆完整预测与赛果](predictions/2026-iem-cologne/README.zh-CN.md)
 

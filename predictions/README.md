@@ -5,7 +5,7 @@ Each live entry preserves the card before results are scored. Older cards added 
 | Major | Record | Results |
 | --- | --- | --- |
 | [PGL Singapore 2026](2026-pgl-singapore/README.md) | Published before Stage 1 | Stage 1 pending; later cards not picked yet |
-| [IEM Cologne 2026](2026-iem-cologne/README.md) | Recovered from contemporaneous notes | 1/3 Swiss missions, 2/3 playoff accuracy missions |
+| [IEM Cologne 2026](2026-iem-cologne/README.md) | Recovered from contemporaneous notes | **Gold Coin**; 1/3 Swiss missions, 2/3 playoff accuracy missions |
 
 The [historical report](../docs/BACKTEST_REPORT.md) covers Copenhagen and Shanghai 2024, and Austin and Budapest 2025. It reports retrospective scores; no locked live cards are claimed for those events.
 

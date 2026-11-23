@@ -57,4 +57,4 @@ Spirit 和 FURIA 都打出 3-0，但我们放在了 3-1 / 3-2。Vitality 以 3-1
 | 半决赛 | FURIA、Spirit | FURIA、Falcons | 1/2，通过 |
 | 总决赛 | Spirit | Falcons | 0/1，未猜中 |
 
-Falcons 在总决赛以 3-0 击败 FURIA。如果已激活挑战币，并按时提交全部四张预测卡，这份成绩对应 **8/11 项挑战，达到金牌挑战币门槛**。实际挑战币等级未核实。
+Falcons 在总决赛以 3-0 击败 FURIA。**Pick'Em 最终成绩：已获得金牌挑战币（Gold）。**

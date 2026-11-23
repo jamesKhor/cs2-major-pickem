@@ -57,4 +57,4 @@ Spirit and FURIA swept from the middle bucket. Vitality finished 3-1, taking a m
 | Semifinals | FURIA, Spirit | FURIA, Falcons | 1/2, passed |
 | Grand Final | Spirit | Falcons | 0/1, missed |
 
-Falcons beat FURIA 3-0 in the final. The logged outcomes would be enough for Gold **if** the coin was active and all four cards were submitted on time. The actual award was not verified.
+Falcons beat FURIA 3-0 in the final. **Final Pick'Em outcome: Gold Coin earned.**
