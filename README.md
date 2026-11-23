@@ -2,7 +2,7 @@
 
 An AI-agent skill for Counter-Strike 2 Major Pick'Em / Viewer Pass predictions.
 
-[中文 README](README.zh-CN.md)
+[中文 README](README.zh-CN.md) | [How we build and test the model](#methodology)
 
 The goal is to **target Gold and keep Diamond possible**, not to guarantee either. CS2 has too much BO1 variance, roster volatility, and playoff upset risk for that. We optimize each card for the mission threshold:
 
@@ -78,6 +78,63 @@ In CS2 Pick'Em, a great team can be a bad pick if it is placed in the wrong buck
 - A team picked `0-3` is wrong if it wins one match
 
 This skill forces the agent to score the card exactly like the in-game Viewer Pass.
+
+## Methodology
+
+The **skill** tells the agent what to verify, how to read Pick'Em rules, and how to record a recommendation. The **simulator** estimates how often each whole card passes. The target is **at least 5 exact hits out of 10**, not the highest average score or the most teams correctly picked to advance.
+
+### How We Develop a Card
+
+1. **Freeze the inputs before lock.** Record the stage format, 16 seeded teams, eight confirmed openers, HLTV/VRS ranks, current rosters, and two-sided opener odds. Use recent results and likely map vetoes where supported. In Stage 1 there is no same-event form; in Stages 2 and 3, include the previous stage's results for teams that qualified.
+2. **Simulate complete Swiss stages.** Use the event's BO1/BO3 rules, reseeding, Buchholz tiebreaks, and rematch avoidance. Compare a balanced model with form-heavy and rank/odds-heavy versions. The model uses the posted odds as opener evidence; later matchups are simulated, not known in advance. [Valve's Major rulebook](https://github.com/ValveSoftware/counter-strike_rules_and_regs/blob/main/major-supplemental-rulebook.md)
+3. **Score whole cards on the same outcomes.** A simulated run counts as a pass only if five or more slots match their exact buckets. Searching full cards captures tradeoffs between slots. For instance, if both teams picked at `3-0` instead qualify at `3-1/3-2`, the card can hit at most four middle slots.
+4. **Test finalists on fresh simulated draws.** Compare the finalists and a rank-first baseline on outcomes that were not used to search for the card. Publish the recommendation before lock and append the real score afterward. Held-out simulated draws check sampling noise; they do not validate the model against real matches.
+
+### How Many Cards Are Possible?
+
+A 16-team stage has two `3-0` slots, two `0-3` slots, and six `3-1/3-2` slots. No team can appear twice, and order within a bucket does not matter:
+
+```text
+Choose 2 of 16 for 3-0:             C(16, 2) = 120
+Choose 2 of the 14 left for 0-3:    C(14, 2) = 91
+Choose 6 of the 12 left for middle: C(12, 6) = 924
+Total: 120 x 91 x 924 = 10,090,080 distinct cards
+```
+
+For any fixed final standings of this format, **801,836** of those cards score at least five. So a uniformly random card has a **7.95%** chance of passing. This is a combinatorial baseline, not a claim that all outcomes are equally likely or that every card can hit all ten slots.
+
+### Singapore 2026 Stage 1 Comparison
+
+We searched **1,247 candidate cards**, then scored the finalists on **180,000 held-out brackets** using the same inputs. Each percentage below is the share of those brackets where that entire card scored **5/10 or better**. For example, the published card passed **60,359 / 180,000** simulated brackets.
+
+| Card | Change from the published card | Estimated chance of 5+ hits |
+| --- | --- | ---: |
+| **Published card** | **100 Thieves and HEROIC at 3-0** | **33.53%** |
+| PVISION sweep alternative | Exchange HEROIC and PVISION between 3-0 and middle | 33.36% |
+| FaZe sweep alternative | Exchange HEROIC and FaZe between 3-0 and middle | 33.18% |
+| Wildcard winless alternative | Replace Lynn Vision with Wildcard at 0-3 | 32.97% |
+| Rank-first baseline | PVISION and Liquid at 3-0; see the full input below | 30.11% |
+| Uniform random card | Exact combinatorial baseline, outside the model | 7.95% |
+
+An exploratory wider search considered **20,434 cards** and did not find a better finalist on the same evaluation brackets. Three reruns with different random seeds and **300,000 evaluation brackets each** kept the same recommendation: **33.54%, 33.51%, and 33.45%**. Those checks support a stable model result, not a claim of a global optimum across all 10 million cards.
+
+### Two Separate Reviews
+
+- **Test review:** Checks whether the program follows the rules. All six existing tests passed, including Swiss pairing, BO1/BO3 formats, and exact-bucket scoring. The review also found two gaps: malformed scenario settings can produce a bogus forecast instead of an error, and a fixed pre-stage maximum of 10 can overstate what's attainable when picks collide. The published Singapore inputs were valid; these gaps remain on the improvement list.
+- **Model review:** Checks whether the inputs and assumptions produce stable, interpretable outputs. The reviewer verified the frozen inputs and score totals, and reproduced **33.53%**. Halving opener-odds weight lowered the published card to **32.88%**; removing the model's extra BO3 edge for stronger teams lowered it to **30.41%**. The published card still led the cards compared in both checks. Changing assumptions moved the estimate far more than rerunning random seeds did.
+
+### Historical Validation
+
+Replay real brackets to test rules, then compare forecast versions using only data timestamped before each stage locked. Start with Cologne and expand in event order. Fit BO1 and BO3 separately, test one change at a time, and judge both match prediction accuracy and actual **5/10 stage passes** on events not used to tune that change. The [2024-2025 retrospective report](docs/BACKTEST_REPORT.md) lacks complete frozen inputs; it is not an independent benchmark or evidence of a live success rate. The [prediction archive](predictions/README.md) keeps live cards and their observed scores separate.
+
+Reproduce the main Singapore comparison from the repository root:
+
+```sh
+node --test skills/cs2-major-pickem/scripts/swiss.test.mjs
+node skills/cs2-major-pickem/scripts/swiss.mjs predictions/2026-pgl-singapore/stage-1-input.json 12000 60000
+```
+
+See the [Singapore card and source notes](predictions/2026-pgl-singapore/README.md#pre-lock-check) and [simulation input guide](skills/cs2-major-pickem/references/swiss-forecast.md).
 
 ## Repository Layout
 
@@ -195,14 +252,6 @@ Every prediction or audit should include:
   - `max_possible_correct`
   - `status`
 - Source links
-
-## Backtesting Philosophy
-
-This skill should be tested stage by stage using only information that would have been available before that stage locked.
-
-Do not run hindsight tests where the agent sees final standings before choosing picks. That makes the skill look stronger than it is and teaches the wrong lessons.
-
-See [docs/BACKTEST_REPORT.md](docs/BACKTEST_REPORT.md) for the current historical test summary, scope, methodology, caveats, and scores.
 
 ## Limitations
 
