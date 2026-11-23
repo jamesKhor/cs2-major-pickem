@@ -1,0 +1,52 @@
+{
+  "event": "PGL Major Singapore 2026 Stage 1",
+  "asOf": "2026-11-23 Asia/Shanghai",
+  "allBo3": false,
+  "sources": {
+    "schedule": "https://www.pglesports.com/cs2/pgl-major-singapore-2026/",
+    "seedingCrossCheck": "https://dakebits.com/cs2-pickem-simulator/",
+    "rankings": "https://www.hltv.org/events/9303/pgl-major-singapore-2026-stage-1",
+    "form": "https://www.hltv.org/news/46015/visualized-every-team-at-pgl-major-singapore-stage-1",
+    "odds": "https://pinnradar.com/pinnacle-odds/esports",
+    "oddsSnapshot": "2026-11-23T02:36:00Z",
+    "vetoPVISION": "https://www.hltv.org/matches/2400499/parivision-vs-dendele-pgl-major-singapore-2026-stage-1",
+    "vetoLynnVision": "https://www.hltv.org/matches/2400495/9z-vs-lynn-vision-pgl-major-singapore-2026-stage-1"
+  },
+  "teams": [
+    {"name":"Ninjas in Pyjamas","hltv":18,"vrs":21},
+    {"name":"PVISION","hltv":13,"vrs":13,"form":-0.12},
+    {"name":"HEROIC","hltv":23,"vrs":18,"form":0.18},
+    {"name":"FaZe","hltv":19,"vrs":24,"form":-0.12},
+    {"name":"Liquid","hltv":16,"vrs":15},
+    {"name":"Eternal Fire","hltv":22,"vrs":23,"form":0.08},
+    {"name":"100 Thieves","hltv":29,"vrs":17,"form":0.18},
+    {"name":"9z","hltv":21,"vrs":35},
+    {"name":"M80","hltv":24,"vrs":27,"form":0.04},
+    {"name":"DENDELE","hltv":33,"vrs":28,"form":0.05},
+    {"name":"Imperial","hltv":48,"vrs":37,"form":-0.05},
+    {"name":"Wildcard","hltv":42,"vrs":42},
+    {"name":"GOSH","hltv":46,"vrs":46},
+    {"name":"FlyQuest","hltv":58,"vrs":44},
+    {"name":"Chinggis Warriors","hltv":59,"vrs":56,"form":-0.10},
+    {"name":"Lynn Vision","hltv":44,"vrs":61}
+  ],
+  "openers": [[1.74,2.15],[1.625,2.36],[1.529,2.60],[1.429,2.95],[1.819,2.05],[1.719,2.19],[1.184,5.22],[1.617,2.38]],
+  "vetoLogit": [0,-0.04,0,0,0,0,0,-0.10],
+  "scenarios": [
+    {"name":"balanced","marketWeight":0.75,"formWeight":0.8,"bo3Scale":1.42,"teamNoise":0.23,"strengthScale":1},
+    {"name":"form-heavy","marketWeight":0.60,"formWeight":1.6,"bo3Scale":1.48,"teamNoise":0.30,"strengthScale":0.92},
+    {"name":"rank-and-odds-heavy","marketWeight":0.90,"formWeight":0.25,"bo3Scale":1.35,"teamNoise":0.18,"strengthScale":1.15}
+  ],
+  "cards": {
+    "top-two-ranks baseline": [["PVISION","Liquid"],["HEROIC","100 Thieves","Ninjas in Pyjamas","Eternal Fire","FaZe","M80"],["Chinggis Warriors","Lynn Vision"]],
+    "public comparison": [["PVISION","FaZe"],["Ninjas in Pyjamas","HEROIC","Liquid","100 Thieves","Eternal Fire","9z"],["Chinggis Warriors","DENDELE"]],
+    "final card": [["100 Thieves","HEROIC"],["PVISION","Liquid","Ninjas in Pyjamas","FaZe","Eternal Fire","M80"],["Chinggis Warriors","Lynn Vision"]],
+    "HEROIC/PVISION swap": [["100 Thieves","PVISION"],["HEROIC","Liquid","Ninjas in Pyjamas","FaZe","Eternal Fire","M80"],["Chinggis Warriors","Lynn Vision"]],
+    "HEROIC/FaZe swap": [["100 Thieves","FaZe"],["PVISION","Liquid","Ninjas in Pyjamas","HEROIC","Eternal Fire","M80"],["Chinggis Warriors","Lynn Vision"]],
+    "Wildcard 0-3": [["100 Thieves","HEROIC"],["PVISION","Liquid","Ninjas in Pyjamas","FaZe","Eternal Fire","M80"],["Chinggis Warriors","Wildcard"]],
+    "Imperial 0-3": [["100 Thieves","HEROIC"],["PVISION","Liquid","Ninjas in Pyjamas","FaZe","Eternal Fire","M80"],["Chinggis Warriors","Imperial"]],
+    "9z middle": [["100 Thieves","HEROIC"],["PVISION","Liquid","Ninjas in Pyjamas","FaZe","Eternal Fire","9z"],["Chinggis Warriors","Lynn Vision"]],
+    "DENDELE middle": [["100 Thieves","HEROIC"],["PVISION","Liquid","Ninjas in Pyjamas","FaZe","Eternal Fire","DENDELE"],["Chinggis Warriors","Lynn Vision"]],
+    "GOSH middle": [["100 Thieves","HEROIC"],["PVISION","Liquid","Ninjas in Pyjamas","FaZe","Eternal Fire","GOSH"],["Chinggis Warriors","Lynn Vision"]]
+  }
+}

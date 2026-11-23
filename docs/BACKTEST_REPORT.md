@@ -4,17 +4,17 @@ This report summarizes the current historical test of the `cs2-major-pickem` ski
 
 ## Executive Summary
 
-The skill performed well as a pass-focused Pick'Em process. It should be treated as a **Gold floor, Diamond upside** system, not a guarantee of Diamond every Major.
+This is a record of an exploratory retrospective exercise. It is not evidence of a Gold floor or a live pass rate. The original pre-lock input packets and cards are not available here for independent reproduction. For real cards and results, see the [prediction archive](../predictions/README.md).
 
 Across the tested 2024 and 2025 CS2 Majors:
 
-- Swiss stages tested: 11
-- Swiss stages passed: 11
+- Swiss stages listed: 10 (2 + 2 + 3 + 3)
+- Swiss stages reported as passed: 10
 - Playoff stages tested: 4
 - Playoff stages passed: 3
 - Estimated coin outcomes: 3 Diamond, 1 Gold, 0 Silver, 0 Copper
 
-The strongest signal is stage survival. The weakest signal is playoff champion certainty.
+The previous aggregate incorrectly counted 11 Swiss stages. The corrected total follows the event-by-event table below.
 
 ## Test Scope
 
@@ -109,7 +109,7 @@ Aggregate:
 
 | Category | Result |
 |---|---:|
-| Swiss stages passed | 11/11 |
+| Swiss stages reported as passed | 10/10 |
 | Playoff stages passed | 3/4 |
 | Diamond outcomes | 3/4 |
 | Gold outcomes | 1/4 |
@@ -118,13 +118,13 @@ Aggregate:
 
 ## Interpretation
 
-The results support using the skill as a disciplined pass-focused process.
+These are historical sanity checks. The run does not establish a real-world pass probability or outperforming another predictor.
 
 What worked:
 
 - Strong survival rate across Swiss stages
 - Good discipline around exact buckets
-- Better than casual prediction by focusing on the 5-correct pass threshold
+- Explicit use of the 5-correct pass threshold
 - Useful stage-by-stage approach instead of trying to predict the entire Major from day one
 
 What failed or remains risky:

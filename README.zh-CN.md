@@ -6,10 +6,24 @@
 
 它的目标不是保证每次都拿 Diamond coin。CS2 的变量太多：BO1 爆冷、队伍临场状态、地图 veto、选手生病或替补、版本变化、现场压力、季后赛冠军预测等等，都可能让完美预测失败。
 
-更现实的目标是：**以 Gold 为底线，争取 Diamond 上限**。
+更现实的目标是：**争取 Gold，保留冲击 Diamond 的机会**，但不保证拿到任何等级。
 
 - 瑞士轮阶段：`5 个正确 = 通过`，`4 个或更少 = 失败`，`6 个以上 = 好结果`
 - 季后赛阶段：通常需要猜中至少 2 个四分之一决赛胜者、至少 1 个半决赛胜者，以及最终冠军
+
+## 当前预测：新加坡 Major 2026 第一阶段
+
+| 分组 | 队伍 |
+| --- | --- |
+| **3-0** | **100 Thieves、HEROIC** |
+| **3-1 / 3-2** | PVISION、Liquid、Ninjas in Pyjamas、FaZe、Eternal Fire、M80 |
+| **0-3** | Chinggis Warriors、Lynn Vision |
+
+首场比赛于 11 月 24 日中午 12:00（中国 / 新加坡时间）开始。请以游戏内倒计时为准，提前激活观赛通行证并保存全部 10 项预测。
+
+[新加坡完整预测与结果](predictions/2026-pgl-singapore/README.md) · [科隆完整预测与结果](predictions/2026-iem-cologne/README.md) · [预测档案](predictions/README.md)
+
+欢迎[提交问题或功能建议](https://github.com/jamesKhor/cs2-major-pickem/issues/new)，也欢迎通过 Pull Request 贡献。请先阅读[贡献指南](CONTRIBUTING.md)。
 
 ## 这个 Skill 做什么
 

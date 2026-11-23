@@ -13,7 +13,7 @@ Produce stage-by-stage CS2 Major Pick'Em cards and audits that optimize for coin
 - `4 or fewer = fail`
 - `6+ = good`
 
-The realistic strategy is a Gold floor with Diamond upside. Do not promise Diamond every Major. CS2 has too many variables for that: BO1 variance, map vetoes, roster issues, illness, travel, crowd pressure, patch/meta shifts, and playoff champion volatility.
+Target Gold while keeping Diamond possible. Neither coin tier nor any stage pass is guaranteed.
 
 The goal is to pass each stage first, then chase 6+ when it does not materially reduce the 5-correct floor.
 
@@ -44,6 +44,8 @@ Pick'Em is exact-bucket scoring, not "which teams are good" scoring.
 - A team picked `3-1/3-2` that finishes `3-0` is wrong.
 - A team picked `3-0` that advances `3-1` or `3-2` is wrong.
 - A team picked `0-3` that wins one match is wrong.
+- A Swiss accuracy mission requires five exact hits total across the ten slots, with no minimum in any bucket unless the current in-game rules say otherwise.
+- Submitting all ten picks on time and getting five correct are separate challenges. For coin credit, confirm the Viewer Pass is active before the stage and the complete card is saved before the in-game cutoff. Missing the accuracy mission does not stop the player from picking the next stage.
 
 Separate these probabilities:
 
@@ -95,6 +97,12 @@ Before locking a playoff bracket, confirm:
 ## Prediction Method
 
 Optimize first for reaching at least 5 correct. Chase 6+ only when it does not materially reduce the 5-correct floor.
+
+Use [the Swiss forecast workflow](references/swiss-forecast.md) when the current format and inputs are verified. Simulate complete brackets with the correct pairing and series rules, then compare full cards on the share of runs with at least five hits. Use current HLTV/VRS, two-sided match odds, roster and form evidence, and likely maps. Stage 1 has no same-event form; for later stages check the actual matches of the teams that qualified. Describe probabilities as model estimates and projected vetoes as unconfirmed.
+
+Check whether both 3-0 picks can sweep together. If both instead finish 3-1/3-2, at most four middle picks can hit, so a winless pick is required. A missed sweep that is eliminated does not take a middle slot. Compare whole-card outcomes; do not apply a second penalty to results that already account for these dependencies.
+
+Preserve each pre-lock card, its date and sources, and append the outcome after the stage. Keep live cards, reconstructed cards, and retrospective backtests distinct.
 
 Evaluate each team on:
 
@@ -151,7 +159,7 @@ Every prediction or audit must include pass-threshold math:
 Calculation:
 
 - `minimum_needed_to_pass = max(0, 5 - locked_correct)`
-- `max_possible_correct = locked_correct + pending_live`
+- `locked_correct + pending_live` is an upper bound. Reduce it when picks cannot coexist due to a shared match or a full exact bucket.
 - `pass` if `locked_correct >= 5`
 - `fail` if `max_possible_correct < 5`, or the stage is complete and `locked_correct < 5`
 - `still alive` otherwise

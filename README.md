@@ -4,10 +4,35 @@ An AI-agent skill for Counter-Strike 2 Major Pick'Em / Viewer Pass predictions.
 
 [中文 README](README.zh-CN.md)
 
-The goal is not to promise a Diamond coin every Major. CS2 has too much BO1 variance, roster volatility, map-veto variance, and playoff upset risk for that. The practical goal is a disciplined **Gold floor with Diamond upside** by optimizing each stage for the mission threshold:
+The goal is to **target Gold and keep Diamond possible**, not to guarantee either. CS2 has too much BO1 variance, roster volatility, and playoff upset risk for that. We optimize each card for the mission threshold:
 
 - Swiss stages: `5 correct = pass`, `4 or fewer = fail`, `6+ = good`
 - Playoffs: satisfy the in-game bracket missions, usually 2 quarterfinal winners, 1 semifinal winner, and the champion
+
+## Current Picks: Singapore 2026 Stage 1
+
+Final pre-lock card, November 23, 2026. The first match is at 12:00 noon SGT (UTC+8) on November 24; follow the in-game countdown. Activate the Singapore Viewer Pass before the stage and save all 10 picks for coin credit.
+
+| Bucket | Picks |
+| --- | --- |
+| **3-0** | **100 Thieves, HEROIC** |
+| **3-1 / 3-2** | PVISION, Liquid, Ninjas in Pyjamas, FaZe, Eternal Fire, M80 |
+| **0-3** | Chinggis Warriors, Lynn Vision |
+
+[Stage 1 reasoning, inputs, and result](predictions/2026-pgl-singapore/README.md#stage-1). The next card is recorded after the previous stage's results and new openers are confirmed.
+
+## Prediction Results
+
+| Major | Stage 1 | Stage 2 | Stage 3 | Playoffs |
+| --- | --- | --- | --- | --- |
+| [IEM Cologne 2026](predictions/2026-iem-cologne/README.md) | 3/10, fail | 5/10, pass | 3/10, fail | 3/4 QF, 1/2 SF, champion missed |
+| [PGL Singapore 2026](predictions/2026-pgl-singapore/README.md) | Card published, result pending | Awaiting field | Awaiting field | Awaiting bracket |
+
+The [prediction archive](predictions/README.md) keeps exact cards next to their outcomes, including misses. The [2024-2025 historical backtests](docs/BACKTEST_REPORT.md) are retrospective and do not count as live predictions.
+
+## Contribute
+
+Found a scoring bug or have an idea for a better forecast? [Open an issue](https://github.com/jamesKhor/cs2-major-pickem/issues/new) or send a pull request. See the [contribution guide](CONTRIBUTING.md) for what evidence and tests to include.
 
 ## What This Skill Does
 
@@ -39,14 +64,17 @@ This skill forces the agent to score the card exactly like the in-game Viewer Pa
 ```text
 cs2-major-pickem/
 +-- README.md
++-- CONTRIBUTING.md
 +-- LICENSE
 +-- docs/
 |   +-- BACKTEST_REPORT.md
++-- predictions/             # Pre-lock cards, source snapshots, and final scores
 +-- skills/
 |   +-- cs2-major-pickem/
 |       +-- SKILL.md
+|       +-- references/
+|       +-- scripts/
 |       +-- agents/
-|           +-- openai.yaml
 +-- prompts/
 |   +-- pre-stage-card.md
 +-- examples/
@@ -92,10 +120,10 @@ For any standard AI agent that supports system prompts or project instructions, 
 
 The agent must verify current data before a live card:
 
-1. Official Valve, in-game, BLAST, ESL, or tournament page for stage rules and schedule
+1. Official Valve, in-game rules, and the event organizer (PGL, BLAST, or ESL) for format and schedule
 2. HLTV event page for live Swiss records, matchups, rankings, results, and team pages
 3. Liquipedia for format and bracket cross-checks
-4. Recent match, roster, and map-pool data
+4. Recent match, roster, map-pool, and two-sided opener odds
 
 If live sources are unavailable, the agent should say the card is blocked or low-confidence instead of pretending.
 
